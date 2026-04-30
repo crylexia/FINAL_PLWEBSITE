@@ -1,87 +1,88 @@
 <?php
 session_start();
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
-include "db.php";
-$uid = $_SESSION["user_id"];
+include "../config/db.php";
 
-// Fetch cart items from the DATABASE instead of just session
-$sql = "SELECT c.quantity, p.* FROM cart c 
-        JOIN products p ON c.product_id = p.id 
-        WHERE c.user_id = $uid";
+/* If admin → see all reviews
+   If customer → see only their own reviews */
+if($_SESSION["role"] === "admin"){
+    $sql = "SELECT r.*, p.name, u.username
+            FROM reviews r
+            JOIN products p ON r.product_id = p.id
+            JOIN users u ON r.user_id = u.id
+            ORDER BY r.created_at DESC";
+} else {
+    $uid = $_SESSION["user_id"];
+    $sql = "SELECT r.*, p.name, u.username
+            FROM reviews r
+            JOIN products p ON r.product_id = p.id
+            JOIN users u ON r.user_id = u.id
+            WHERE r.user_id = $uid
+            ORDER BY r.created_at DESC";
+}
 
 $result = mysqli_query($conn, $sql);
-
-$products = [];
-$total = 0;
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $row["qty"] = $row["quantity"];
-    $row["subtotal"] = $row["qty"] * $row["price"];
-    $total += $row["subtotal"];
-    $products[] = $row;
-}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-<title>Cart | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<title>Review Records | LakbayLokal</title>
+<link rel="stylesheet" href="../assets/css/style.css">
 <style>
-.cart-container{
+.reviews-container{
     padding:40px;
 }
-.cart-title{
-    color:#102a43;
+
+.reviews-title{
     font-size:28px;
+    color:#102a43;
     margin-bottom:20px;
 }
-.cart-table{
+
+.reviews-table{
     width:100%;
-    border-collapse:collapse;
     background:white;
     border-radius:16px;
     overflow:hidden;
     box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    border-collapse:collapse;
 }
-.cart-table th, .cart-table td{
-    padding:15px;
+
+.reviews-table th,
+.reviews-table td{
+    padding:25px;
     text-align:left;
 }
-.cart-table th{
+
+.reviews-table th{
     background:#1e3a8a;
     color:white;
 }
-.cart-table tr:nth-child(even){
-    background:#f3f4f6;
-}
-.cart-total{
-    margin-top:30px;
-    background:#102a43;
-    color:white;
-    padding:25px;
-    border-radius:16px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-.checkout-btn{
+
+.rating-badge{
     background:#f59e0b;
-    border:none;
-    padding:15px 30px;
-    font-size:16px;
-    border-radius:10px;
-    cursor:pointer;
+    color:white;
+    padding:6px 12px;
+    border-radius:12px;
+    font-size:14px;
 }
-.empty-cart{
-    background:white;
-    padding:70px;
-    text-align:center;
-    border-radius:16px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+
+.comment{
+    max-width:300px;
+    color:#374151;
+}
+
+.back-link{
+    display:inline-block;
+    margin-bottom:15px;
+    text-decoration:none;
+    color:#1e3a8a;
+    font-weight:600;
 }
 
         /* FOOTER */
@@ -155,57 +156,44 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
-    <nav>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="products.php">Products</a>
-        <a href="orders.php">Orders</a>
-        <a href="reviews.php">Reviews</a>
-    </nav>
+    <nav><a href="../admin/dashboard.php">Dashboard</a></nav>
 </header>
 
-<div class="cart-container">
+<div class="reviews-container">
 
-<h2 class="cart-title"> Your Shopping Cart</h2>
+<h2 class="reviews-title">⭐ Review Records</h2>
 
-<?php if(empty($products)): ?>
-    <div class="empty-cart">
-        <h3>Your cart is empty</h3>
-        <p>Browse Lingayen local products and add items to your cart.</p>
-        <a href="products.php" class="btn">Shop Now</a>
-    </div>
-<?php else: ?>
-
-<table class="cart-table">
+<table class="reviews-table">
 <tr>
+    <th>Review ID</th>
     <th>Product</th>
-    <th>Price</th>
-    <th>Quantity</th>
-    <th>Subtotal</th>
+    <th>User</th>
+    <th>Rating</th>
+    <th>Comment</th>
+    <th>Date</th>
 </tr>
 
-<?php foreach($products as $p): ?>
+<?php while($row = mysqli_fetch_assoc($result)): ?>
 <tr>
-    <td><?= $p["name"] ?></td>
-    <td>₱<?= number_format($p["price"],2) ?></td>
-    <td><?= $p["qty"] ?></td>
-    <td>₱<?= number_format($p["subtotal"],2) ?></td>
+    <td>#<?= $row["id"] ?></td>
+    <td><?= $row["name"] ?></td>
+    <td><?= $row["username"] ?></td>
+    <td>
+        <span class="rating-badge">
+            <?= $row["rating"] ?>/5
+        </span>
+    </td>
+    <td class="comment"><?= $row["comment"] ?></td>
+    <td><?= date("M d, Y", strtotime($row["created_at"])) ?></td>
 </tr>
-<?php endforeach; ?>
+<?php endwhile; ?>
 
 </table>
-
-<div class="cart-total">
-    <h2>Total: ₱<?= number_format($total,2) ?></h2>
-    <form action="checkout.php" method="post">
-        <button class="checkout-btn">Proceed to Checkout</button>
-    </form>
-</div>
-
-<?php endif; ?>
 
 </div>
 
 </body>
+
 <footer class="site-footer">
     <div class="footer-content">
         <h3>LakbayLokal Marketplace</h3>
@@ -216,4 +204,5 @@ while ($row = mysqli_fetch_assoc($result)) {
         <p>© 2026 LakbayLokal Marketplace — Promoting Lingayen Souvenir Shops and Local Products</p>
     </div>
 </footer>
+
 </html>

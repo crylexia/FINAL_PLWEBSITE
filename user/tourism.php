@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tourism Areas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
     <style>
         :root {
@@ -425,8 +425,7 @@
         <a href="index.php">Home</a>
         <a href="catalog.php">Products</a>
         <a href="tourism.php">Tourism Areas</a>
-        <a href="sellers.php">Sellers</a>
-        <a href="login.php" class="btn">Login</a>
+        <a href="../auth/login.php" class="btn">Login</a>
     </nav>
 </header>
 
@@ -483,7 +482,7 @@
 
             <div class="tourism-image">
                 <div id="instaSlider">
-                    <img id="tourismMainImage" src="pictures/lingbeach.jpg" alt="Lingayen Beachfront">
+                    <img id="tourismMainImage" src="../assets/css/images/pictures/lingbeach.jpg" alt="Lingayen Beachfront">
 
                     <div class="image-overlay"></div>
 
@@ -511,31 +510,31 @@
 <script>
     const tourismImages = [
         {
-            src: "pictures/lingbeach.jpg",
+            src: "../assets/css/images/pictures/lingbeach.jpg",
             caption: "Lingayen Beachfront",
             tag: "Coastal Attraction",
             description: "Experience the scenic coastal stretch of Lingayen, known for open public spaces and waterfront views."
         },
         {
-            src: "pictures/lingcapitol.jpg",
+            src: "../assets/css/images/pictures/lingcapitol.jpg",
             caption: "Pangasinan Provincial Capitol",
             tag: "Heritage Landmark",
             description: "A distinguished neoclassical structure that serves as one of Pangasinan’s most recognizable landmarks."
         },
         {
-            src: "pictures/urdujahouse.jpg",
+            src: "../assets/css/images/pictures/urdujahouse.jpg",
             caption: "Urduja House",
             tag: "Historic Residence",
             description: "An official provincial residence associated with local heritage and the legend of Princess Urduja."
         },
         {
-            src: "pictures/provmuseum.jpg",
+            src: "../assets/css/images/pictures/provmuseum.jpg",
             caption: "Casa Real and Pangasinan Provincial Museum",
             tag: "Cultural Site",
             description: "A heritage destination that showcases the history, culture, and legacy of Pangasinan."
         },
         {
-            src: "pictures/sisonauditorium.jpg",
+            src: "../assets/css/images/pictures/sisonauditorium.jpg",
             caption: "Sison Auditorium",
             tag: "Public Venue",
             description: "A long-established public venue for performances, civic events, and community gatherings."

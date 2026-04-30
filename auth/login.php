@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "db.php";
+include "../config/db.php";
 
 $error = "";
 
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user_id"] = $row["id"];
             $_SESSION["role"] = $row["role"];
 
-            header("Location: dashboard.php");
+            header("Location: ../admin/dashboard.php");
             exit();
 
         } else {
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
 <title>Login | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
 <style>
 .login-wrapper {
@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </p>
     
     <p class="back-home">
-        <a href="index.php">← Back to Home</a>
+        <a href="../user/index.php">← Back to Home</a>
     </p>
     
 </div>

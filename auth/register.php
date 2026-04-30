@@ -1,26 +1,36 @@
 <?php
-include "db.php";
+session_start();
+include "../config/db.php";
 
 $message = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+
     $fullname = $_POST["fullname"];
     $username = $_POST["username"];
     $email = $_POST["email"];
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
+    // check username
     $check = mysqli_query($conn, "SELECT * FROM users WHERE username='$username'");
     
     if(mysqli_num_rows($check) > 0){
         $message = "Username already exists!";
     } else {
-        $sql = "INSERT INTO users (fullname, username, email, password) 
-                VALUES ('$fullname','$username','$email','$password')";
-        if(mysqli_query($conn, $sql)){
-            header("Location: login.php");
-        } else {
-            $message = "Registration failed!";
-        }
+
+        $_SESSION["reg_data"] = [
+            "fullname" => $fullname,
+            "username" => $username,
+            "email" => $email,
+            "password" => $password
+        ];
+
+        $otp = rand(100000, 999999);
+        $_SESSION["reg_otp"] = $otp;
+        $_SESSION["show_otp"] = $otp;
+
+        header("Location: verify_register.php");
+        exit();
     }
 }
 ?>
@@ -28,7 +38,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html>
 <head>
 <title>Register - LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 

@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ $role = $_SESSION["role"] ?? "buyer";
 <html>
 <head>
 <title>Dashboard | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <style>
 body{
     margin:0;
@@ -139,7 +139,7 @@ body{
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
     <nav>
-        <a href="logout.php">Logout</a>
+        <a href="../auth/logout.php">Logout</a>
     </nav>
 </header>
 
@@ -159,34 +159,34 @@ body{
             <p>Add, edit, and remove local products.</p>
         </a>
 
-        <a href="orders.php" class="card" style="border-left:8px solid #2563eb;">
+        <a href="../user/orders.php" class="card" style="border-left:8px solid #2563eb;">
             <h3>Order Management</h3>
             <p>Approve and manage customer orders.</p>
         </a>
 
-        <a href="review_records.php" class="card" style="border-left:8px solid #16a34a;">
+        <a href="../reviews/review_records.php" class="card" style="border-left:8px solid #16a34a;">
             <h3>Review Records</h3>
             <p>View all submitted product reviews.</p>
         </a>
 
     <?php else: ?>
 
-        <a href="products.php" class="card">
+        <a href="../user/products.php" class="card">
             <h3>Browse Products</h3>
             <p>Explore authentic LGU-approved products.</p>
         </a>
         
-        <a href="cart.php" class="card" style="border-left:8px solid #f59e0b;">
+        <a href="../user/cart.php" class="card" style="border-left:8px solid #f59e0b;">
             <h3>My Cart</h3>
             <p>View items you added and proceed to checkout.</p>
         </a>
 
-        <a href="orders.php" class="card">
+        <a href="../user/orders.php" class="card">
             <h3>My Orders</h3>
             <p>Track your purchases and payments.</p>
         </a>
 
-        <a href="reviews.php" class="card">
+        <a href="../reviews/reviews.php" class="card">
             <h3>My Reviews</h3>
             <p>View and manage your submitted reviews.</p>
         </a>

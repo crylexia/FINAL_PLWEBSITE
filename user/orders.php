@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
-include "db.php";
+include "../config/db.php";
 
 $is_admin = ($_SESSION["role"] === "admin");
 
@@ -29,7 +29,7 @@ $result = mysqli_query($conn, $sql);
 <html>
 <head>
 <title>Orders | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <style>
     .orders-container { padding: 40px; max-width: 1300px; margin: auto; }
     .orders-title { font-size: 28px; color: #102a43; margin-bottom: 20px; }
@@ -193,7 +193,7 @@ $result = mysqli_query($conn, $sql);
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
     <nav>
-        <a href="dashboard.php">Dashboard</a>
+        <a href="../admin/dashboard.php">Dashboard</a>
         
         <?php if(!$is_admin): ?>
             <a href="products.php">Products</a>
@@ -205,7 +205,7 @@ $result = mysqli_query($conn, $sql);
                 $cart_count = $count_row['total_items'] ?? 0;
                 ?>
             <a href="cart.php">Cart (<?= $cart_count ?>)</a>
-            <a href="reviews.php">Reviews</a>
+            <a href="../reviews/reviews.php">Reviews</a>
         <?php endif; ?>
     </nav>
 </header>
@@ -280,7 +280,7 @@ $result = mysqli_query($conn, $sql);
                     <?php if($is_admin): ?>
                     <td style="text-align: center;">
                         <?php if($row["status"] == "Pending"): ?>
-                            <form method="post" action="approve_order.php" style="margin:0;">
+                            <form method="post" action="../admin/approve_order.php" style="margin:0;">
                                 <input type="hidden" name="order_id" value="<?= $row["id"] ?>">
                                 <button type="submit" class="approve-btn">Mark as Paid</button>
                             </form>

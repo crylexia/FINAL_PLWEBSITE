@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "../config/db.php";
 
 $products = [];
 
@@ -16,7 +16,7 @@ if ($result) {
 <html>
 <head>
 <title>Product Catalog | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
 <style>
 /* ── Products Section Header ── */
@@ -198,8 +198,7 @@ if ($result) {
     <a href="index.php">Home</a>
     <a href="catalog.php">Products</a>
     <a href="tourism.php">Tourism Areas</a>
-    <a href="sellers.php">Sellers</a>
-    <a href="login.php" class="btn">Login</a>
+    <a href="../auth/login.php" class="btn">Login</a>
 </nav>
 </header>
 
@@ -224,7 +223,7 @@ if ($result) {
             $img = !empty($p["image"]) ? $p["image"] : "placeholder.png";
         ?>
 
-        <img src="uploads/<?= htmlspecialchars($img) ?>" 
+        <img src="../assets/css/uploads/<?= htmlspecialchars($img) ?>" 
              alt="<?= htmlspecialchars($p["name"]) ?>" 
              style="width:100%; height:180px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
 
@@ -241,7 +240,7 @@ if ($result) {
         <strong>₱<?= number_format($p["price"],2) ?></strong>
 
         <!-- Login Button -->
-        <a href="login.php" class="login-btn">Login to Buy</a>
+        <a href="../auth/login.php" class="login-btn">Login to Buy</a>
 
     </div>
 <?php endforeach; ?>

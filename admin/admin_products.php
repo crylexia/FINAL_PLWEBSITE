@@ -1,9 +1,9 @@
 <?php
 session_start();
-include "db.php";
+include "../config/db.php";
 
 if(!isset($_SESSION["role"]) || $_SESSION["role"] != "admin"){
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
@@ -18,27 +18,47 @@ if(isset($_POST["add_product"])){
     $desc = mysqli_real_escape_string($conn, $_POST["description"]);
     $price = $_POST["price"];
     $category = mysqli_real_escape_string($conn, $_POST["category"]);
+    $stock = (int)$_POST["stock"]; // ✅ NEW
 
     $imageName = $_FILES["image"]["name"];
     $tmp = $_FILES["image"]["tmp_name"];
-    $folder = "uploads/" . $imageName;
+    $folder = "../assets/css/uploads/" . $imageName;
 
     if(move_uploaded_file($tmp, $folder)){
-        $sql = "INSERT INTO products (name, description, price, image, category)
-                VALUES ('$name','$desc','$price','$imageName','$category')";
+        $sql = "INSERT INTO products (name, description, price, image, category, stock)
+                VALUES ('$name','$desc','$price','$imageName','$category','$stock')";
         mysqli_query($conn,$sql);
         $msg = "Product added successfully!";
     } else {
         $msg = "Image upload failed!";
     }
 }
-
 /* =========================
    DELETE PRODUCT
 ========================= */
 if(isset($_GET["delete"])){
     $id = $_GET["delete"];
     mysqli_query($conn, "DELETE FROM products WHERE id='$id'");
+    header("Location: admin_products.php");
+    exit();
+}
+
+/* =========================
+   RESTOCK PRODUCT
+========================= */
+if(isset($_POST["restock"])){
+
+    $product_id = (int)$_POST["product_id"];
+    $add_stock = (int)$_POST["add_stock"];
+
+    if($add_stock > 0){
+        mysqli_query($conn, "
+            UPDATE products 
+            SET stock = stock + $add_stock 
+            WHERE id = $product_id
+        ");
+    }
+
     header("Location: admin_products.php");
     exit();
 }
@@ -58,7 +78,9 @@ $selected_categories = isset($_GET['category']) ? (array)$_GET['category'] : [];
 /* Build category filter clause */
 $cat_filter = '';
 if (!empty($selected_categories)) {
-    $safe_cats = array_map(fn($c) => "'" . mysqli_real_escape_string($conn, $c) . "'", $selected_categories);
+    $safe_cats = array_map(function($c) use ($conn) {
+    return "'" . mysqli_real_escape_string($conn, $c) . "'";
+        }, $selected_categories);
     $cat_filter = "WHERE category IN (" . implode(',', $safe_cats) . ")";
 }
 
@@ -76,7 +98,7 @@ while($row = mysqli_fetch_assoc($result)){
 <html>
 <head>
 <title>Admin Products</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
 <style>
 body{ background:#f1f5f9; }
@@ -360,6 +382,11 @@ button{
             </div>
 
             <div style="margin-bottom: 5px;">
+                <label style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">Stock</label>
+                <input type="number" name="stock" min="0" placeholder="Enter stock" required>
+            </div>
+
+            <div style="margin-bottom: 5px;">
                 <label style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">Category</label>
                 <select name="category" required>
                     <option value="">Select Category</option>
@@ -389,15 +416,15 @@ button{
     <div class="product-list">
 
         <!-- ── Category Filter Bar ── -->
-        <form method="GET" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="filter-bar">
+        <form method="GET" action="<?= \htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="filter-bar">
             <label>Filter by Category:</label>
 
             <div class="category-checkboxes">
                 <?php foreach ($categories as $cat): ?>
                     <label class="checkbox-pill">
-                        <input type="checkbox" name="category[]" value="<?= htmlspecialchars($cat) ?>"
+                        <input type="checkbox" name="category[]" value="<?= \htmlspecialchars($cat) ?>"
                             <?= in_array($cat, $selected_categories) ? 'checked' : '' ?>>
-                        <span><?= htmlspecialchars($cat) ?></span>
+                        <span><?= \htmlspecialchars($cat) ?></span>
                     </label>
                 <?php endforeach; ?>
             </div>
@@ -405,7 +432,7 @@ button{
             <button type="submit" class="filter-btn">Apply</button>
 
             <?php if (!empty($selected_categories)): ?>
-                <a href="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="clear-btn">✕ Clear</a>
+                <a href="<?= \htmlspecialchars($_SERVER['PHP_SELF']) ?>" class="clear-btn">✕ Clear</a>
             <?php endif; ?>
         </form>
 
@@ -416,14 +443,45 @@ button{
                 <div class="product-card">
                     <?php $img = (!empty($p["image"])) ? $p["image"] : "placeholder.png"; ?>
 
-                    <img src="uploads/<?= htmlspecialchars($img) ?>"
-                        alt="<?= htmlspecialchars($p["name"]) ?>">
+                    <img src="../assets/css/uploads/<?= \htmlspecialchars($img) ?>"
+                        alt="<?= \htmlspecialchars($p["name"]) ?>">
 
-                    <p class="product-category"><?= htmlspecialchars($p["category"]) ?></p>
+                    <p class="product-category"><?= \htmlspecialchars($p["category"]) ?></p>
 
-                    <h3><?= htmlspecialchars($p["name"]) ?></h3>
-                    <p><?= htmlspecialchars($p["description"]) ?></p>
+                    <h3><?= \htmlspecialchars($p["name"]) ?></h3>
+                    <p><?= \htmlspecialchars($p["description"]) ?></p>
                     <strong>₱<?= number_format($p["price"],2) ?></strong>
+
+                    <p style="margin-top:6px; font-size:13px; 
+                        color: <?= $p["stock"] <= 5 ? 'red' : '#475569' ?>;">
+                        Stock: <?= (int)$p["stock"] ?>
+                    </p>
+
+                    <!-- RESTOCK FORM -->
+                    <form method="post" style="margin-top:10px; display:flex; gap:6px;">
+                        <input type="hidden" name="product_id" value="<?= (int)$p['id'] ?>">
+
+                        <input 
+                            type="number" 
+                            name="add_stock" 
+                            min="1" 
+                            placeholder="+Qty" 
+                            required
+                            style="width:70px; padding:6px; border-radius:6px; border:1px solid #ccc;"
+                        >
+
+                        <button type="submit" name="restock" style="
+                            background:#f59e0b;
+                            color:white;
+                            border:none;
+                            padding:6px 10px;
+                            border-radius:6px;
+                            cursor:pointer;
+                            font-size:12px;
+                            font-weight:600;">
+                            Restock
+                        </button>
+                    </form>
 
                     <div style="margin-top:15px;">
                         <a href="edit_product.php?id=<?= $p["id"] ?>"

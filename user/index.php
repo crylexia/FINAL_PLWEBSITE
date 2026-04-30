@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LakbayLokal | LGU Local Products Marketplace</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
     <style>
         /* HERO */
@@ -394,9 +394,8 @@
         <a href="index.php">Home</a>
         <a href="catalog.php">Products</a>
         <a href="tourism.php">Tourism Areas</a>
-        <a href="sellers.php">Sellers</a>
-        <a href="register.php" class="btn">Register</a>
-        <a href="login.php" class="btn">Login</a>
+        <a href="../auth/register.php" class="btn">Register</a>
+        <a href="../auth/login.php" class="btn">Login</a>
     </nav>
 </header>
 
@@ -420,7 +419,7 @@
             <h2>Bringing Lingayen’s Souvenir Shops Online</h2>
             <p>LakbayLokal connects customers to souvenir shops in Lingayen, Pangasinan, making it easier to discover products that reflect the town’s culture, local pride, and tourism identity. From delicacies to handcrafted pasalubong, every item represents the heart of Lingayen.</p>
         </div>
-        <img src="pictures/lingayen_seal.png" alt="Lingayen, Pangasinan">
+        <img src="../assets/css/images/pictures/lingayen_seal.png" alt="Lingayen, Pangasinan">
     </div>
 </section>
 
@@ -450,7 +449,7 @@
     <div class="categories-grid">
         <div class="category-card">
             <div class="category-image-wrap">
-                <img src="pictures/souvenir_clothes.jpg" alt="Souvenir Clothing">
+                <img src="../assets/css/images/pictures/souvenir_clothes.jpg" alt="Souvenir Clothing">
             </div>
             <div class="category-content">
                 <h3>Souvenir Clothing</h3>
@@ -460,7 +459,7 @@
 
         <div class="category-card">
             <div class="category-image-wrap">
-                <img src="pictures/souvenir_handicrafts.jpg" alt="Handcrafted Souvenirs">
+                <img src="../assets/css/images/pictures/souvenir_handicrafts.jpg" alt="Handcrafted Souvenirs">
             </div>
             <div class="category-content">
                 <h3>Handcrafted Souvenirs</h3>
@@ -470,7 +469,7 @@
 
         <div class="category-card">
             <div class="category-image-wrap">
-                <img src="pictures/souvenir_foods.jpg" alt="Local Delicacies">
+                <img src="../assets/css/images/pictures/souvenir_foods.jpg" alt="Local Delicacies">
             </div>
             <div class="category-content">
                 <h3>Local Delicacies</h3>

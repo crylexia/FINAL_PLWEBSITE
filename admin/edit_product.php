@@ -1,9 +1,9 @@
 <?php
 session_start();
-include "db.php";
+include "../config/db.php";
 
 if(!isset($_SESSION["role"]) || $_SESSION["role"] != "admin"){
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
@@ -28,7 +28,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         $imageName = time() . "_" . $_FILES["image"]["name"];
         $tmp = $_FILES["image"]["tmp_name"];
-        move_uploaded_file($tmp, "uploads/" . $imageName);
+        move_uploaded_file($tmp, "../assets/css/uploads/" . $imageName);
 
         $sql = "UPDATE products 
                 SET name='$name', description='$desc', price='$price', category='$category', image='$imageName'
@@ -172,7 +172,7 @@ button:hover{
 
         <div class="image-preview">
             <p><strong>Current Image</strong></p>
-            <img src="uploads/<?= htmlspecialchars($product['image']) ?>">
+            <img src="../assets/css/uploads/<?= htmlspecialchars($product['image']) ?>">
         </div>
 
         <input type="file" name="image">

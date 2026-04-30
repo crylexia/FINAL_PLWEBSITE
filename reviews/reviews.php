@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
@@ -140,7 +140,7 @@ $h_stmt->close();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ratings & Reviews - LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
 <style>
 /* =========================
@@ -537,10 +537,10 @@ $h_stmt->close();
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
     <nav>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="products.php">Products</a>
-        <a href="cart.php">Cart (<?= $cart_count ?>)</a>
-        <a href="orders.php">Orders</a>
+        <a href="../admin/dashboard.php">Dashboard</a>
+        <a href="../user/products.php">Products</a>
+        <a href="../user/cart.php">Cart (<?= $cart_count ?>)</a>
+        <a href="../user/orders.php">Orders</a>
     </nav>
 </header>
 
@@ -566,7 +566,7 @@ $h_stmt->close();
             <?php while($row = $pending_result->fetch_assoc()): ?>
                 <div class="review-card">
                     <div class="review-image">
-                        <img src="uploads/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
+                        <img src="../assets/css/uploads/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
                     </div>
 
                     <div class="review-content">
@@ -607,7 +607,7 @@ $h_stmt->close();
         <?php while($h_row = $history_result->fetch_assoc()): ?>
             <div class="review-card">
                 <div class="review-image">
-                    <img src="uploads/<?php echo htmlspecialchars($h_row['image']); ?>" alt="<?php echo htmlspecialchars($h_row['name']); ?>">
+                    <img src="../assets/css/uploads/<?php echo htmlspecialchars($h_row['image']); ?>" alt="<?php echo htmlspecialchars($h_row['name']); ?>">
                 </div>
 
                 <div class="review-content">

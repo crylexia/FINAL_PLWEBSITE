@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 
-include "db.php";
+include "../config/db.php";
 
 $uid = (int) $_SESSION["user_id"];
 $products = [];
@@ -52,7 +52,7 @@ if ($result) {
 <html>
 <head>
 <title>Products | LakbayLokal</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 <style>
 
 /* ── Products Section Header ── */
@@ -373,10 +373,10 @@ if ($result) {
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
     <nav>
-        <a href="dashboard.php">Dashboard</a>
+        <a href="../admin/dashboard.php">Dashboard</a>
         <a href="cart.php">Cart (<?= (int)$cart_count ?>)</a>
         <a href="orders.php">Orders</a>
-        <a href="reviews.php">Reviews</a>
+        <a href="../reviews/reviews.php">Reviews</a>
     </nav>
 </header>
 
@@ -416,11 +416,13 @@ if ($result) {
 <div class="product-grid">
 <?php if (count($products) > 0): ?>
     <?php foreach ($products as $p): ?>
+        <?php $img = (!empty($p["image"])) ? $p["image"] : "placeholder.png"; ?>
+        <?php $stock = (int)$p["stock"]; ?>
+
         <div class="product-card">
-            <?php $img = (!empty($p["image"])) ? $p["image"] : "placeholder.png"; ?>
 
             <div class="image-wrap">
-                <img src="uploads/<?= htmlspecialchars($img) ?>"
+                <img src="../assets/css/uploads/<?= htmlspecialchars($img) ?>"
                     style="width:100%; height:180px; object-fit:cover; border-radius:12px; margin-bottom:12px;">
 
                 <!-- Favorite Heart Button -->
@@ -440,14 +442,24 @@ if ($result) {
 
             <h3><?= htmlspecialchars($p["name"]) ?></h3>
             <p><?= htmlspecialchars($p["description"]) ?></p>
+
             <strong>₱<?= number_format($p["price"], 2) ?></strong>
 
-            <form method="post" action="add_to_cart.php">
+            <!-- STOCK DISPLAY -->
+            <p style="margin-top:6px; font-size:13px;
+                color: <?= ($stock <= 5) ? 'red' : '#475569' ?>;">
+                Stock: <?= $stock ?>
+            </p>
+
+            <form method="post" action="add_to_cart.php"
+                <?= ($stock <= 0) ? 'onsubmit="return false;"' : '' ?>>
+
                 <input type="hidden" name="product_id" value="<?= (int)$p["id"] ?>">
 
                 <!-- Quantity Selector -->
                 <div class="qty-wrap">
                     <button type="button" class="qty-btn" onclick="changeQty(<?= (int)$p['id'] ?>, -1)">−</button>
+
                     <input
                         type="number"
                         name="quantity"
@@ -455,12 +467,22 @@ if ($result) {
                         class="qty-input"
                         value="1"
                         min="1"
+                        max="<?= $stock ?>"
                         readonly>
+
                     <button type="button" class="qty-btn" onclick="changeQty(<?= (int)$p['id'] ?>, 1)">+</button>
                 </div>
 
-                <button class="buy-btn" type="submit">Add to Cart</button>
+                <button 
+                    class="buy-btn"
+                    type="submit"
+                    <?= ($stock <= 0) ? 'disabled style="background:#9ca3af; cursor:not-allowed;"' : '' ?>>
+
+                    <?= ($stock <= 0) ? 'Out of Stock' : 'Add to Cart' ?>
+                </button>
+
             </form>
+
         </div>
     <?php endforeach; ?>
 <?php else: ?>
@@ -472,8 +494,13 @@ if ($result) {
 function changeQty(productId, change) {
     const input = document.getElementById('qty-' + productId);
     let current = parseInt(input.value) || 1;
+    const maxStock = parseInt(input.max) || 1;
+
     current += change;
+
     if (current < 1) current = 1;
+    if (current > maxStock) current = maxStock;
+
     input.value = current;
 }
 </script>
