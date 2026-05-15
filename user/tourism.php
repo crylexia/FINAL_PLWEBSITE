@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tourism Areas</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <link rel="stylesheet" href="../assets/css/style.css" />
+
+    <!-- LEAFLET MAP -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
 
     <style>
         :root {
@@ -27,18 +34,19 @@
         /* =========================
            TOURISM SECTION REDESIGN
         ========================== */
+
         .overview {
             max-width: 1400px;
             margin: 50px auto 70px;
-            padding: 0 18px; /* reduced so no thick white frame */
+            padding: 0 18px;
         }
 
         .tourism-section-card {
-            background: #fcfdff;;
+            background: #fcfdff;
             border-radius: 28px;
             padding: 42px;
             box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-            border: none; /* remove the visible edge */
+            border: none;
         }
 
         .section-eyebrow {
@@ -98,6 +106,7 @@
         }
 
         /* Attraction cards */
+
         .attractions-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(220px, 1fr));
@@ -112,7 +121,10 @@
             border-radius: 16px;
             padding: 18px 18px 16px;
             cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            transition: transform 0.25s ease,
+                        box-shadow 0.25s ease,
+                        border-color 0.25s ease,
+                        background 0.25s ease;
         }
 
         .attraction-card:hover {
@@ -174,6 +186,7 @@
         /* =========================
            SLIDER
         ========================== */
+
         #instaSlider {
             position: relative;
             overflow: hidden;
@@ -248,7 +261,8 @@
             cursor: pointer;
             z-index: 25;
             backdrop-filter: blur(4px);
-            transition: background 0.2s ease, transform 0.2s ease;
+            transition: background 0.2s ease,
+                        transform 0.2s ease;
             line-height: 1;
         }
 
@@ -257,8 +271,13 @@
             transform: translateY(-50%) scale(1.08);
         }
 
-        .left-arrow  { left: 16px; }
-        .right-arrow { right: 16px; }
+        .left-arrow {
+            left: 16px;
+        }
+
+        .right-arrow {
+            right: 16px;
+        }
 
         .slider-dots {
             position: absolute;
@@ -275,7 +294,8 @@
             border-radius: 50%;
             background: rgba(255,255,255,0.45);
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: background 0.3s ease,
+                        transform 0.3s ease;
         }
 
         .dot.active {
@@ -298,7 +318,67 @@
             line-height: 1.7;
         }
 
+        /* =========================
+           INTERACTIVE MAP
+        ========================== */
+
+        .map-section {
+            margin-top: 40px;
+            padding-top: 45px;
+            position: relative;
+        }
+
+        .map-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(244, 180, 0, 0.9),
+                transparent
+            );
+        }
+
+        .map-title {
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .map-subtitle {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 22px;
+            max-width: 760px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #tourismMap {
+            width: 100%;
+            height: 520px;
+            margin-top: 10px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+            z-index: 1;
+        }
+
+        .leaflet-container {
+            border-radius: 24px;
+        }
+
         /* FOOTER */
+
         .site-footer {
             background: #183153;
             color: #f8fafc;
@@ -329,7 +409,7 @@
         }
 
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 1px solid rgba(255,255,255,0.12);
             padding: 16px 20px;
         }
 
@@ -342,7 +422,9 @@
         /* =========================
            RESPONSIVE
         ========================== */
+
         @media (max-width: 1100px) {
+
             .tourism-layout {
                 flex-direction: column;
             }
@@ -358,6 +440,7 @@
         }
 
         @media (max-width: 768px) {
+
             .overview {
                 padding: 0 12px;
                 margin: 30px auto 50px;
@@ -385,6 +468,10 @@
                 height: 320px;
             }
 
+            #tourismMap {
+                height: 360px;
+            }
+
             .slider-caption-inside span {
                 font-size: 18px;
             }
@@ -403,24 +490,18 @@
                 margin-bottom: 24px;
             }
 
-            .footer-contact h4 {
-                font-size: 20px;
-            }
-
-            .footer-contact p {
-                font-size: 15px;
-            }
-
             .footer-bottom p {
                 font-size: 13px;
             }
         }
     </style>
 </head>
+
 <body>
 
 <header>
     <div class="logo">LakbayLokal Marketplace</div>
+
     <nav>
         <a href="index.php">Home</a>
         <a href="catalog.php">Products</a>
@@ -430,59 +511,97 @@
 </header>
 
 <section class="overview">
+
     <div class="tourism-section-card">
-        <span class="section-eyebrow">Featured Destination</span>
+
+        <span class="section-eyebrow">
+            Featured Destination
+        </span>
 
         <h2>Discover Lingayen, Pangasinan</h2>
+
         <p class="subtitle">
-            A coastal destination where heritage landmarks, cultural spaces, and scenic waterfront attractions come together in one historic provincial capital.
+            A coastal destination where heritage landmarks,
+            cultural spaces, and scenic waterfront attractions
+            come together in one historic provincial capital.
         </p>
 
         <div class="tourism-layout">
+
+            <!-- LEFT CONTENT -->
             <div class="tourism-text">
+
                 <p class="tourism-intro">
-                    <strong>Lingayen</strong> stands as one of Pangasinan’s most notable destinations, known for its historic institutions,
-                    public landmarks, and beachfront spaces along the Lingayen Gulf. It offers visitors a well-rounded experience
-                    that blends local heritage, civic architecture, and coastal leisure.
+                    <strong>Lingayen</strong> stands as one of
+                    Pangasinan’s most notable destinations,
+                    known for its historic institutions,
+                    public landmarks, and beachfront spaces
+                    along the Lingayen Gulf.
                 </p>
 
                 <div class="attractions-grid">
+
                     <div class="attraction-card active" data-index="0">
                         <h4>Capitol Beachfront and Baywalk</h4>
-                        <p>A scenic seaside promenade ideal for sunset walks, open-air recreation, and family visits.</p>
+                        <p>
+                            A scenic seaside promenade ideal for
+                            sunset walks and recreation.
+                        </p>
                     </div>
 
                     <div class="attraction-card" data-index="1">
                         <h4>Pangasinan Provincial Capitol</h4>
-                        <p>A prominent neoclassical landmark widely recognized for its architectural character and civic importance.</p>
+                        <p>
+                            A prominent neoclassical landmark in Lingayen.
+                        </p>
                     </div>
 
                     <div class="attraction-card" data-index="2">
                         <h4>Urduja House</h4>
-                        <p>The official residence of the Governor of Pangasinan, named after the legendary Princess Urduja.</p>
+                        <p>
+                            Official residence of the Governor of Pangasinan.
+                        </p>
                     </div>
 
                     <div class="attraction-card" data-index="3">
                         <h4>Casa Real and Provincial Museum</h4>
-                        <p>A heritage site that preserves and presents the local history, identity, and cultural legacy of Pangasinan.</p>
+                        <p>
+                            A heritage site preserving Pangasinan culture.
+                        </p>
                     </div>
 
                     <div class="attraction-card" data-index="4">
                         <h4>Sison Auditorium</h4>
-                        <p>A longstanding venue for public programs, cultural performances, and important community events.</p>
+                        <p>
+                            Venue for public programs and performances.
+                        </p>
                     </div>
+
                 </div>
 
                 <p class="tourism-closing">
-                    With its combination of public landmarks, cultural institutions, and coastal attractions, Lingayen offers a meaningful and memorable travel experience in the heart of Pangasinan.
+                    With its combination of public landmarks,
+                    cultural institutions, and coastal attractions,
+                    Lingayen offers a meaningful and memorable
+                    travel experience in the heart of Pangasinan.
                 </p>
 
-                <a href="catalog.php" class="cta-btn">Explore Local Products</a>
+                <a href="catalog.php" class="cta-btn">
+                    Explore Local Products
+                </a>
+
             </div>
 
+            <!-- RIGHT CONTENT -->
             <div class="tourism-image">
+
                 <div id="instaSlider">
-                    <img id="tourismMainImage" src="../assets/css/images/pictures/lingbeach.jpg" alt="Lingayen Beachfront">
+
+                    <img
+                        id="tourismMainImage"
+                        src="../assets/css/images/pictures/lingbeach.jpg"
+                        alt="Lingayen Beachfront"
+                    />
 
                     <div class="image-overlay"></div>
 
@@ -491,57 +610,92 @@
                         <span id="imageCaption">Lingayen Beachfront</span>
                     </div>
 
-                    <span class="arrow-btn left-arrow" id="prevBtn">&#10094;</span>
-                    <span class="arrow-btn right-arrow" id="nextBtn">&#10095;</span>
+                    <span class="arrow-btn left-arrow" id="prevBtn">
+                        &#10094;
+                    </span>
+
+                    <span class="arrow-btn right-arrow" id="nextBtn">
+                        &#10095;
+                    </span>
 
                     <div class="slider-dots" id="sliderDots"></div>
+
                 </div>
 
                 <div class="slider-meta">
                     <p id="imageDescription">
-                        Experience the scenic coastal stretch of Lingayen, known for open public spaces and waterfront views.
+                        Experience the scenic coastal stretch of Lingayen.
                     </p>
                 </div>
+
             </div>
+
         </div>
+
+        <!-- MAP SECTION -->
+        <div class="map-section">
+
+            <h3 class="map-title">
+                Interactive Tourism Map
+            </h3>
+
+            <p class="map-subtitle">
+                Explore the featured tourist attractions in Lingayen
+                through this interactive map.
+            </p>
+
+            <div id="tourismMap"></div>
+
+        </div>
+
     </div>
+
 </section>
+
+<!-- LEAFLET -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
     const tourismImages = [
-        {
-            src: "../assets/css/images/pictures/lingbeach.jpg",
-            caption: "Lingayen Beachfront",
-            tag: "Coastal Attraction",
-            description: "Experience the scenic coastal stretch of Lingayen, known for open public spaces and waterfront views."
-        },
-        {
-            src: "../assets/css/images/pictures/lingcapitol.jpg",
-            caption: "Pangasinan Provincial Capitol",
-            tag: "Heritage Landmark",
-            description: "A distinguished neoclassical structure that serves as one of Pangasinan’s most recognizable landmarks."
-        },
-        {
-            src: "../assets/css/images/pictures/urdujahouse.jpg",
-            caption: "Urduja House",
-            tag: "Historic Residence",
-            description: "An official provincial residence associated with local heritage and the legend of Princess Urduja."
-        },
-        {
-            src: "../assets/css/images/pictures/provmuseum.jpg",
-            caption: "Casa Real and Pangasinan Provincial Museum",
-            tag: "Cultural Site",
-            description: "A heritage destination that showcases the history, culture, and legacy of Pangasinan."
-        },
-        {
-            src: "../assets/css/images/pictures/sisonauditorium.jpg",
-            caption: "Sison Auditorium",
-            tag: "Public Venue",
-            description: "A long-established public venue for performances, civic events, and community gatherings."
-        },
-    ];
+    {
+        src: "../assets/css/images/pictures/lingbeach.jpg",
+        caption: "Lingayen Gulf Baywalk",
+        tag: "Coastal Attraction",
+        description: "A scenic beachfront promenade along the Lingayen Gulf.",
+        coords: [16.036373, 120.230814]
+    },
+    {
+        src: "../assets/css/images/pictures/lingcapitol.jpg",
+        caption: "Pangasinan Provincial Capitol",
+        tag: "Heritage Landmark",
+        description: "A distinguished neoclassical landmark in Pangasinan.",
+        coords: [16.033596, 120.231669]
+    },
+    {
+        src: "../assets/css/images/pictures/urdujahouse.jpg",
+        caption: "Urduja House",
+        tag: "Historic Residence",
+        description: "Official residence of the Governor of Pangasinan.",
+        coords: [16.034653, 120.232376]
+    },
+    {
+        src: "../assets/css/images/pictures/provmuseum.jpg",
+        caption: "Casa Real ng Lingayen",
+        tag: "Cultural Site",
+        description: "A historical structure preserving Pangasinan heritage.",
+        coords: [16.019926, 120.230317]
+    },
+    {
+        src: "../assets/css/images/pictures/sisonauditorium.jpg",
+        caption: "Sison Auditorium",
+        tag: "Public Venue",
+        description: "A venue for performances and civic events.",
+        coords: [16.033339, 120.228729]
+    }
+];
 
     let current = 0;
+
     const img = document.getElementById("tourismMainImage");
     const caption = document.getElementById("imageCaption");
     const tag = document.getElementById("imageTag");
@@ -550,102 +704,202 @@
     const slider = document.getElementById("instaSlider");
     const cards = document.querySelectorAll(".attraction-card");
 
-    // Build dots
+    // MAP
+    const map = L.map("tourismMap", {
+        zoomControl: true
+    }).setView([16.033596, 120.231669], 17);
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution: "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+    const markers = [];
+
+    tourismImages.forEach((place, i) => {
+
+    const marker = L.marker(place.coords)
+        .addTo(map)
+        .bindPopup(`
+            <b>${place.caption}</b><br>
+            ${place.tag}
+        `);
+
+    marker.on("click", () => {
+        goTo(i);
+    });
+
+    markers.push(marker);
+    });
+
+    setTimeout(() => {
+        map.invalidateSize();
+        map.setView([16.033596, 120.231669], 16);
+    }, 500);
+
+    // BUILD DOTS
     tourismImages.forEach((_, i) => {
+
         const d = document.createElement("span");
+
         d.className = "dot" + (i === 0 ? " active" : "");
+
         d.addEventListener("click", (e) => {
             e.stopPropagation();
             goTo(i);
             resetAutoSlide();
         });
+
         dotsWrap.appendChild(d);
     });
 
     function updateDots() {
+
         dotsWrap.querySelectorAll(".dot").forEach((d, i) => {
             d.classList.toggle("active", i === current);
         });
     }
 
     function updateActiveCard() {
+
         cards.forEach((card, i) => {
             card.classList.toggle("active", i === current);
         });
     }
 
     function goTo(index) {
-        current = (index + tourismImages.length) % tourismImages.length;
+
+        current = (index + tourismImages.length)
+            % tourismImages.length;
 
         img.style.opacity = 0;
 
         setTimeout(() => {
+
             img.src = tourismImages[current].src;
             img.alt = tourismImages[current].caption;
-            caption.textContent = tourismImages[current].caption;
-            tag.textContent = tourismImages[current].tag;
-            description.textContent = tourismImages[current].description;
+
+            caption.textContent =
+                tourismImages[current].caption;
+
+            tag.textContent =
+                tourismImages[current].tag;
+
+            description.textContent =
+                tourismImages[current].description;
+
             img.style.opacity = 1;
 
             updateDots();
             updateActiveCard();
+
+            markers[current].openPopup();
+
         }, 180);
     }
 
-    // Clickable attraction cards
+    // CLICKABLE CARDS
     cards.forEach((card) => {
+
         card.addEventListener("click", () => {
-            const index = parseInt(card.dataset.index);
+
+            const index =
+                parseInt(card.dataset.index);
+
             goTo(index);
             resetAutoSlide();
         });
     });
 
-    document.getElementById("prevBtn").addEventListener("click", (e) => {
-        e.stopPropagation();
-        goTo(current - 1);
-        resetAutoSlide();
-    });
+    document.getElementById("prevBtn")
+        .addEventListener("click", (e) => {
 
-    document.getElementById("nextBtn").addEventListener("click", (e) => {
-        e.stopPropagation();
-        goTo(current + 1);
-        resetAutoSlide();
-    });
+            e.stopPropagation();
 
-    // Touch swipe
+            goTo(current - 1);
+            resetAutoSlide();
+        });
+
+    document.getElementById("nextBtn")
+        .addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            goTo(current + 1);
+            resetAutoSlide();
+        });
+
+    // TOUCH SWIPE
     let touchStartX = 0;
 
-    slider.addEventListener("touchstart", e => {
-        touchStartX = e.touches[0].clientX;
-    }, { passive: true });
+    slider.addEventListener(
+        "touchstart",
+        e => {
+            touchStartX =
+                e.touches[0].clientX;
+        },
+        { passive: true }
+    );
 
-    slider.addEventListener("touchend", e => {
-        const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
-            goTo(current + (diff > 0 ? 1 : -1));
-            resetAutoSlide();
+    slider.addEventListener(
+        "touchend",
+        e => {
+
+            const diff =
+                touchStartX -
+                e.changedTouches[0].clientX;
+
+            if (Math.abs(diff) > 50) {
+
+                goTo(
+                    current + (diff > 0 ? 1 : -1)
+                );
+
+                resetAutoSlide();
+            }
         }
-    });
+    );
 
-    // Auto-slide
-    let autoSlide = setInterval(() => goTo(current + 1), 5000);
+    // AUTO SLIDE
+    let autoSlide =
+        setInterval(() => goTo(current + 1), 5000);
 
     function resetAutoSlide() {
+
         clearInterval(autoSlide);
-        autoSlide = setInterval(() => goTo(current + 1), 5000);
+
+        autoSlide =
+            setInterval(() => goTo(current + 1), 5000);
     }
 </script>
 
 <footer class="site-footer">
+
     <div class="footer-content">
-        <h3>LakbayLokal Marketplace</h3>
-        <p class="footer-tagline">Your online destination for authentic souvenir products from Lingayen, Pangasinan.</p>
+
+        <h3>
+            LakbayLokal Marketplace
+        </h3>
+
+        <p class="footer-tagline">
+            Your online destination for authentic souvenir
+            products from Lingayen, Pangasinan.
+        </p>
+
     </div>
 
     <div class="footer-bottom">
-        <p>© 2026 LakbayLokal Marketplace — Promoting Lingayen Souvenir Shops and Local Products</p>
+
+        <p>
+            © 2026 LakbayLokal Marketplace —
+            Promoting Lingayen Souvenir Shops
+            and Local Products
+        </p>
+
     </div>
+
 </footer>
 
 </body>
