@@ -195,7 +195,7 @@ if ($result) {
 <header>
 <div class="logo">LakbayLokal Marketplace</div>
 <nav>
-    <a href="index.php">Home</a>
+    <a href="../index.php">Home</a>
     <a href="catalog.php">Products</a>
     <a href="tourism.php">Tourism Areas</a>
     <a href="../auth/login.php" class="btn">Login</a>

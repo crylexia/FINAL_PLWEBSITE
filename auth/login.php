@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </p>
     
     <p class="back-home">
-        <a href="../user/index.php">← Back to Home</a>
+        <a href="../index.php">← Back to Home</a>
     </p>
     
 </div>
