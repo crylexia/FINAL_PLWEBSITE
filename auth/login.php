@@ -103,6 +103,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Login</button>
     </form>
 
+    <p style="margin-top:16px; font-size:14px;">
+        <a href="forgot.php" 
+        style="color:#1e3a8a; font-weight:600; text-decoration:none;">
+            Forgot Username or Password?
+        </a>
+    </p>
+
     <p style="color:red; margin-top:40px;">
         <?= $error ?>
     </p>
